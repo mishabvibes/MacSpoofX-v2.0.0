@@ -1,0 +1,4 @@
+prettytable>=3.0.0
+schedule>=1.1.0
+netifaces>=0.11.0
+colorama>=0.4.4
