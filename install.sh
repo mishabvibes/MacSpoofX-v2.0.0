@@ -91,15 +91,27 @@ fi
 # Install Python dependencies
 echo -e "\n${CYAN}[*] Installing Python dependencies...${NC}"
 
-if [ -f "requirements.txt" ]; then
-    echo -e "${CYAN}[*] Installing from requirements.txt...${NC}"
-    pip3 install -r requirements.txt --user
-else
-    echo -e "${CYAN}[*] Installing individual packages...${NC}"
-    pip3 install --user prettytable schedule netifaces colorama
-fi
+# Try system packages first (recommended for Kali)
+echo -e "${CYAN}[*] Attempting to install via apt (recommended for Kali)...${NC}"
+sudo apt install -y python3-prettytable python3-schedule python3-netifaces python3-colorama 2>/dev/null
 
-echo -e "${GREEN}[+] Python dependencies installed${NC}"
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}[+] Python dependencies installed via apt${NC}"
+else
+    # Fallback to pip with --break-system-packages for Kali Linux
+    echo -e "${YELLOW}[!] APT installation failed, using pip with --break-system-packages...${NC}"
+    echo -e "${YELLOW}[!] This is safe for Kali Linux and won't break your system${NC}"
+    
+    if [ -f "requirements.txt" ]; then
+        echo -e "${CYAN}[*] Installing from requirements.txt...${NC}"
+        pip3 install -r requirements.txt --break-system-packages
+    else
+        echo -e "${CYAN}[*] Installing individual packages...${NC}"
+        pip3 install --break-system-packages prettytable schedule netifaces colorama
+    fi
+    
+    echo -e "${GREEN}[+] Python dependencies installed via pip${NC}"
+fi
 
 # Make script executable
 echo -e "\n${CYAN}[*] Making macspoofx.py executable...${NC}"

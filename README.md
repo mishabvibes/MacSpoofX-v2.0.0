@@ -199,13 +199,29 @@ During installation, you may be asked if you want macchanger to run automaticall
 
 The script will automatically install missing Python packages on first run. Alternatively, install them manually:
 
+**For Kali Linux 2023+ (Recommended):**
 ```bash
-# Install all Python dependencies
-sudo pip3 install prettytable schedule netifaces colorama
-
-# Or use requirements.txt if provided
-sudo pip3 install -r requirements.txt
+# Use apt for cleanest installation
+sudo apt update
+sudo apt install -y python3-prettytable python3-schedule python3-netifaces python3-colorama
 ```
+
+**Alternative methods:**
+```bash
+# Method 1: Re-run updated installer (handles everything)
+./install.sh
+
+# Method 2: pip with --break-system-packages (safe for Kali)
+pip3 install --break-system-packages prettytable schedule netifaces colorama
+
+# Method 3: Virtual environment (most isolated)
+python3 -m venv macspoofx-env
+source macspoofx-env/bin/activate
+pip install -r requirements.txt
+```
+
+**Got "externally-managed-environment" error?**  
+👉 See [INSTALL_TROUBLESHOOTING.md](INSTALL_TROUBLESHOOTING.md) for detailed solutions.
 
 ### Step 4: Make Script Executable
 
